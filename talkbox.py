@@ -13,9 +13,10 @@ def speak(sender, text: str):
     if not text:
         return
     wav = tts(text, voice=dpg.get_value("voice"),
-              pitch=dpg.get_value("pitch"),
-              speed=dpg.get_value("speed"),
-              tone=dpg.get_value("tone"))
+          pitch=dpg.get_value("pitch"),
+          speed=dpg.get_value("speed"),
+          tone=dpg.get_value("tone"),
+          volume=dpg.get_value("volume"))   # <-- add this
     AUDIO_OUT.put(wav)          # <-- array, not bytes
 
 def stt_thread():
@@ -54,6 +55,7 @@ with dpg.window(tag="main", label="TalkBox",
     dpg.add_slider_int(tag="pitch", label="Pitch /st", default_value=0, min_value=-12, max_value=12)
     dpg.add_slider_float(tag="speed", label="Speed", default_value=1.0, min_value=0.5, max_value=2.0)
     dpg.add_slider_float(tag="tone",  label="Tone",  default_value=0.0, min_value=-1.0, max_value=1.0)
+    dpg.add_slider_float(label="Volume", tag="volume", default_value=1.0, min_value=0.0, max_value=1.0)
 dpg.create_viewport(title="TalkBox", width=420, height=320)
 dpg.setup_dearpygui(); dpg.show_viewport()
 

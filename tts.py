@@ -18,14 +18,15 @@ def load_vocoder():
 #    )
     pass
 
-def tts(text: str, voice="emma", pitch=0, speed=1.0, tone=0.0):
+def tts(text, voice="emma", pitch=0, speed=1.0, tone=0.0, volume=1.0):
     text = text.strip()
-    if not text:                                        # empty → 0.1 s silence
+    if not text:
         return np.zeros(int(0.1 * 22050), dtype=np.int16)
 
-    wav = model.tts(text)
+    wav = model.tts(text)                      # create float32 wav
     wav = np.array(wav, dtype=np.float32)
     if speed != 1.0:
         wav = np.interp(np.arange(0, len(wav), speed), np.arange(len(wav)), wav)
     wav = np.clip(wav, -1.0, 1.0)
+    wav *= volume                              # apply volume
     return (wav * 32767).astype(np.int16)
