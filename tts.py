@@ -9,10 +9,17 @@ vocoder = None
 
 def load_vocoder():
     global vocoder
-    vocoder = TTS("vocoder_models/en/ljspeech/hifigan_v2", gpu=False).to("cpu")
+    from TTS.utils.synthesizer import Synthesizer          # low-level loader
+    vocoder = Synthesizer(
+        tts_checkpoint=None,
+        tts_config_path=None,
+        vocoder_checkpoint="vocoder_models/en/ljspeech/hifigan_v2/model.pth",
+        vocoder_config="vocoder_models/en/ljspeech/hifigan_v2/config.json",
+        use_cuda=False
+    )
 
 def tts(text: str, voice: str = "emma", pitch: int = 0, speed: float = 1.0, tone: float = 0.0):
-    wav = model.tts(text)
+    wav = vocoder.tts(text)   # vocoder.tts() still works
     wav = np.array(wav, dtype=np.float32)
     # quick speed change (resample)
     if speed != 1.0:
