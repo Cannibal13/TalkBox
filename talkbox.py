@@ -5,20 +5,24 @@ from tts import tts, load_vocoder
 from stt import stt_listen
 
 TEXT_IN   = queue.Queue()
-AUDIO_OUT = queue.Queue()
+AUDIO_OUT = queue.Queue()   # will hold *numpy* arrays
 load_vocoder()
 
 def speak(sender, text: str):
-    wav = tts(text,
-              voice=dpg.get_value("voice"),
+    text = text.strip()
+    if not text:
+        return
+    wav = tts(text, voice=dpg.get_value("voice"),
               pitch=dpg.get_value("pitch"),
               speed=dpg.get_value("speed"),
-              tone =dpg.get_value("tone"))
-    AUDIO_OUT.put(wav)
+              tone=dpg.get_value("tone"))
+    AUDIO_OUT.put(wav)          # <-- array, not bytes
 
 def stt_thread():
     while True:
         text = stt_listen()
+        if not text or not text.strip():        # ← ignore silence / empties
+            continue
         dpg.set_value("type_box", text)
         speak(None, text)
 
@@ -40,7 +44,8 @@ dpg.create_context()
 with dpg.window(tag="main", label="TalkBox v1"):
     dpg.add_text("Input:")
     dpg.add_input_text(tag="type_box", width=-1)
-    dpg.add_button(label="Speak", callback=lambda: speak(None, dpg.get_value("type_box")))
+    dpg.add_button(label="Speak", callback=lambda:
+               speak(None, dpg.get_value("type_box").strip()))
     dpg.add_button(label="Push-to-talk", callback=lambda: threading.Thread(target=stt_thread, daemon=True).start())
     dpg.add_radio_button(("Emma","Liam","John"), tag="voice", default_value="Emma")
     dpg.add_slider_int(tag="pitch", label="Pitch /st", default_value=0, min_value=-12, max_value=12)

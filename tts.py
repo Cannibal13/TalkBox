@@ -16,12 +16,15 @@ def load_vocoder():
 #        vocoder_config="vocoder_models/en/ljspeech/hifigan_v2/config.json",
 #        use_cuda=False
 #    )
-     pass
+    pass
 
-def tts(text: str, voice: str = "emma", pitch: int = 0, speed: float = 1.0, tone: float = 0.0):
-    wav = vocoder.tts(text)   # vocoder.tts() still works
+def tts(text: str, voice="emma", pitch=0, speed=1.0, tone=0.0):
+    text = text.strip()
+    if not text:                                        # empty → 0.1 s silence
+        return np.zeros(int(0.1 * 22050), dtype=np.int16)
+
+    wav = model.tts(text)
     wav = np.array(wav, dtype=np.float32)
-    # quick speed change (resample)
     if speed != 1.0:
         wav = np.interp(np.arange(0, len(wav), speed), np.arange(len(wav)), wav)
     wav = np.clip(wav, -1.0, 1.0)
