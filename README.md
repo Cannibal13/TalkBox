@@ -16,7 +16,7 @@ A pocket-sized TTS + STT engine with a slider GUI and a socket API, designed to 
 
 ## Quick Start
 ```bash
-git clone https://github.com/yourname/talkbox.git
+git clone https://github.com/Cannibal13/talkbox.git
 cd talkbox
 pip install -r requirements.txt   # 30 s, models auto-download
 python talkbox.py                 # GUI appears; start talking
