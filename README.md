@@ -20,3 +20,18 @@ git clone https://github.com/Cannibal13/talkbox.git
 cd talkbox
 pip install -r requirements.txt   # 30 s, models auto-download
 python talkbox.py                 # GUI appears; start talking
+
+## Troubleshooting `pip install`
+If you see  
+`ERROR: No matching distribution found for dearpygui==1.9.6`  
+just edit `requirements.txt` and replace the pinned version with  
+
+dearpygui>=1.9
+
+(or run `pip install dearpygui>=1.9` manually).  
+PyPI does not host the fictional `1.9.6` build; `>=1.9` pulls the latest stable wheel (tested up to 1.11.1).
+
+(Optional) quick one-liner for copy-pasters
+```bash
+# fast fix without editing the file
+pip install dearpygui>=1.9 TTS>=0.22 faster-whisper>=0.10 sounddevice pyzmq flask
