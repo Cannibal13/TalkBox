@@ -41,7 +41,10 @@ def audio_consumer():
         sd.sleep(50)
 
 dpg.create_context()
-with dpg.window(tag="main", label="TalkBox v1"):
+with dpg.window(tag="main", label="TalkBox",
+                width=420,   
+                height=320):
+    # your existing widgets stay here
     dpg.add_text("Input:")
     dpg.add_input_text(tag="type_box", width=-1)
     dpg.add_button(label="Speak", callback=lambda:
