@@ -1,0 +1,7 @@
+ dearpygui==1.9.6
+ sounddevice>=0.4.6
+ numpy>=1.23
+ TTS>=0.22
+ faster-whisper>=0.10
+ pyzmq>=25.0
+ flask>=2.3          # only if you use REST instead of ZeroMQ
