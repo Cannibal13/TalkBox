@@ -1,7 +1,9 @@
-import os, numpy as np, TTS.api, sounddevice as sd
-from TTS.api import TTS          # ← add this import
-model = TTS("tts_models/en/ljspeech/tacotron2-DDC", gpu=False).to("cpu")
+import os, numpy as np, sounddevice as sd
+from TTS.api import TTS
+
+MODEL_DIR = os.path.join(os.path.dirname(__file__), "models", "tts")
 os.makedirs(MODEL_DIR, exist_ok=True)
+
 model = TTS("tts_models/en/ljspeech/tacotron2-DDC", gpu=False).to("cpu")
 vocoder = None
 
